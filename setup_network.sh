@@ -31,7 +31,7 @@ echo "Updating system..."
 apt update && apt upgrade -y
 
 echo "Installing necessary packages..."
-apt install -y hostapd dnsmasq iptables-persistent openvpn tor lighttpd lighttpd-mod-cgi apache2-utils openssl
+apt install -y hostapd dnsmasq iptables-persistent tor lighttpd lighttpd-mod-cgi apache2-utils openssl
 
 echo "Stopping services to configure them..."
 systemctl stop hostapd
@@ -85,15 +85,14 @@ systemctl restart hostapd dnsmasq
 
 echo "Setting up ProtonVPN..."
 
-# Install ProtonVPN CLI
-echo "Installing ProtonVPN CLI..."
-wget -q -O - https://protonvpn.com/download/protonvpn-public.asc | apt-key add -
-echo 'deb https://repo.protonvpn.com/debian unstable main' > /etc/apt/sources.list.d/protonvpn.list
-apt update
-apt install -y protonvpn-cli
+# Install Python3 and pip if they are not installed
+sudo apt install python3 python3-pip -y
 
-echo "Please log in to ProtonVPN CLI..."
-protonvpn-cli login
+# Install ProtonVPN CLI using pip
+sudo pip3 install protonvpn-cli
+
+# Initialize ProtonVPN CLI
+sudo protonvpn init
 
 echo "Configuring Tor..."
 cat >> /etc/tor/torrc <<EOF
